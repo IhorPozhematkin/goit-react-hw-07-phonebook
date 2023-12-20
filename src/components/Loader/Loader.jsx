@@ -1,16 +1,15 @@
-import { RotatingLines } from 'react-loader-spinner';
-import { LoaderStyled } from './Loader.styled';
+import { Circles } from 'react-loader-spinner';
 
 export const Loader = () => {
   return (
-    <LoaderStyled>
-      <RotatingLines
-        strokeColor="#21ebff"
-        strokeWidth="5"
-        animationDuration="0.75"
-        width="96"
-        visible={true}
-      />
-    </LoaderStyled>
+    <Circles
+      height="80"
+      width="80"
+      color="#4fa94d"
+      ariaLabel="circles-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+      visible={true}
+    />
   );
 };

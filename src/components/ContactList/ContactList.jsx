@@ -1,7 +1,6 @@
 import { ContactItem } from 'components/ContactItem/ContactItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { Error } from 'components/Error/Error';
 import { fetchContacts } from './../../redux/operations';
 import {
   selectContacts,
@@ -21,7 +20,7 @@ export const ContactList = () => {
 
   return (
     <>
-      {error && <Error />}
+      {error && <p>Please, try again.</p>}
       <ul>
         {filterContacts.map(contact => (
           <ContactItem contact={contact} key={contact.id} />
