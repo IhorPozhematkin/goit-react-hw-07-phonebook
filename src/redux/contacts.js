@@ -1,30 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+import { addContact, deleteContact, fetchContacts } from './operations';
+import { handlePending, handleRejected } from './helpers';
 
-const contactsState = {
-  contacts: [],
+const contactsInitialState = {
+  items: [],
+  isLoading: false,
+  error: null,
 };
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: contactsState,
-  reducers: {
-    addContactAction: {
-      prepare(newContact) {
-        return {
-          payload: {
-            ...newContact,
-            id: nanoid(),
-          },
-        };
-      },
-      reducer(state, action) {
-        return { ...state, contacts: [...state.contacts, action.payload] };
-      },
-    },
-    removeContactAction(state, action) {
-      state.contacts = state.contacts.filter(({ id }) => id !== action.payload);
-    },
+  initialState: contactsInitialState,
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items = action.payload;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items.unshift(action.payload);
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.items = state.items.filter(({ id }) => id !== action.payload.id);
+      })
+      .addMatcher(action => {
+        return action.type.endsWith('pending');
+      }, handlePending)
+      .addMatcher(action => {
+        return action.type.endsWith('rejected');
+      }, handleRejected);
   },
 });
 

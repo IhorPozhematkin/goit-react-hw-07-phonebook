@@ -1,11 +1,11 @@
 import { useDispatch } from 'react-redux';
 import { ButtonDelete, Item } from './ContactItem.styled';
-import { removeContactAction } from './../../redux/contacts';
+import { deleteContact } from './../../redux/operations';
 
 export const ContactItem = ({ contact }) => {
   const dispatch = useDispatch();
 
-  const onDeleteContact = () => dispatch(removeContactAction(contact.id));
+  const onDeleteContact = () => dispatch(deleteContact(contact.id));
 
   return (
     <Item>

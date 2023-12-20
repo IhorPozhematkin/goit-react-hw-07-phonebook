@@ -1,23 +1,38 @@
 import { ContactItem } from 'components/ContactItem/ContactItem';
-import { useSelector } from 'react-redux';
-import { getContacts, getFilter } from './../../redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { Error } from 'components/Error/Error';
+import { fetchContacts } from './../../redux/operations';
+import {
+  selectContacts,
+  selectError,
+  selectFilteredContacts,
+} from './../../redux/selectors';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  const filterContacts = useSelector(selectFilteredContacts);
+  const error = useSelector(selectError);
 
-  const filterContacts = () => {
-    const filteredContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase().trim())
-    );
-    return filteredContacts;
-  };
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
-    <ul>
-      {filterContacts().map(contact => (
-        <ContactItem contact={contact} key={contact.id} />
-      ))}
-    </ul>
+    <>
+      {error && <Error />}
+      <ul>
+        {filterContacts.map(contact => (
+          <ContactItem contact={contact} key={contact.id} />
+        ))}
+      </ul>
+      {!error && (
+        <p>
+          You have {contacts.length} contacts. You filtered
+          {filterContacts.length} contacts.
+        </p>
+      )}
+    </>
   );
 };

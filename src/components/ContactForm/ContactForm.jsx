@@ -2,8 +2,8 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import 'yup-phone-lite';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContactAction } from './../../redux/contacts';
-import { getContacts } from './../../redux/selectors';
+import { selectContacts } from './../../redux/selectors';
+import { addContact } from './../../redux/operations';
 import {
   ButtonSubmit,
   ErrorMessageStyled,
@@ -28,9 +28,9 @@ const schema = yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
-  const addContact = newContact => {
+  const addNewContact = newContact => {
     const isExist = contacts.find(
       contact =>
         contact.name.toLowerCase() === newContact.name.toLowerCase().trim()
@@ -41,11 +41,11 @@ export const ContactForm = () => {
       return;
     }
 
-    dispatch(addContactAction(newContact));
+    dispatch(addContact(newContact));
   };
 
   const handleSubmit = (values, { resetForm }) => {
-    addContact(values);
+    addNewContact(values);
     resetForm();
   };
 
