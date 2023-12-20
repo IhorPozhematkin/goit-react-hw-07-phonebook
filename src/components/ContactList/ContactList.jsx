@@ -7,7 +7,6 @@ import { selectError, selectFilteredContacts } from './../../redux/selectors';
 export const ContactList = () => {
   const dispatch = useDispatch();
   const filterContacts = useSelector(selectFilteredContacts);
-  console.log(filterContacts);
   const error = useSelector(selectError);
 
   useEffect(() => {
